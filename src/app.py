@@ -1,14 +1,14 @@
 import tools, requests
-from flask import Flask, request, flask_cors
-from flask_cors import cross_origin
+from flask import Flask, request
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def index():
     return 'Dosewise Backend'
 
 @app.route('/api/v1/lookup')
-@cross_origin()
 def lookup():
     name = request.args.get('name').lower()
     return tools.get_data(f'https://api.fda.gov/drug/ndc.json?search=generic_name:"{name}"&limit=1')
