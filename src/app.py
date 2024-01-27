@@ -28,7 +28,7 @@ def add():
         dosage_frequency = request.args.get('dosage_frequency')
         dosage_number = request.args.get('dosage_number')
         id = db.add_medication(name, manufacturer_name, dosage_start_date, dosage_end_date, time_until_next_dose, dosage_frequency_unit, dosage_frequency, dosage_number)
-        db.run_query(f'UPDATE users SET med_ids="{db.get_medicines_for_user(username)}" WHERE username="{username}"')
+        db.add_id_to_user(username, id)
         return 'true'
     else:
         return 'false'
@@ -43,7 +43,6 @@ def auth():
     else:
         return 'false'
     
-
 @app.route('/api/v1/get_medicines_for_user')
 def get_medicines_for_user():
     username = request.args.get('username')
