@@ -45,19 +45,25 @@ def auth():
 @app.route('/api/v1/get_medicines_for_user')
 def get_medicines_for_user():
     username = request.args.get('username')
-    return db.get_medicines_for_user(username)
-    
+    hash = request.args.get('hash')
+    if db.get_hash(username) == hash: return db.get_medicines_for_user(username)
+    else: return 'INVALID HASH'
+
 # run lookups.get_interactions on every possible pair of medicines for a user
 @app.route('/api/v1/get_interactions_for_user')
 def get_interactions_for_user():
     username = request.args.get('username')
-    meds = db.get_medicines_for_user(username)
-    interactions = []
-    for i in range(len(meds)):
-        for j in range(i+1, len(meds)):
-            interactions.append(lookups.get_interactions(meds[i][1], meds[j][1]))
-    while 'no interactions found!' in interactions: interactions.remove('no interactions found!')
-    return interactions
+    hash = request.args.get('hash')
+    if db.get_hash(username) == hash:
+        meds = db.get_medicines_for_user(username)
+        interactions = []
+        for i in range(len(meds)):
+            for j in range(i+1, len(meds)):
+                interactions.append(lookups.get_interactions(meds[i][1], meds[j][1]))
+        while 'no interactions found!' in interactions: interactions.remove('no interactions found!')
+        return interactions
+    else:
+        return 'INVALID HASH'
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
