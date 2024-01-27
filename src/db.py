@@ -1,5 +1,6 @@
 # python functions to interact with the sqlite3 database
 import sqlite3
+import tools
 
 # run query on database
 def run_query(query):
@@ -18,29 +19,28 @@ def reset_db():
     # create users table
     run_query('CREATE TABLE users (username TEXT, full_name TEXT, hash TEXT, med_ids TEXT)') # med_ids is a comma separated list of medication ids that belong to the user
     # add test user jane Doe
-    run_query('INSERT INTO users VALUES ("jdoe", "Jane Doe", "cc3a0280e4fc1415930899896574e118", "2,3,4")')
+    run_query('INSERT INTO users VALUES ("jdoe", "Jane Doe", "5f4dcc3b5aa765d61d8327deb882cf99", "2,3,4")')
 
     # create medications table, ids should be an integer
     
-    run_query('CREATE TABLE medications (id INTEGER, name TEXT, manufacturer_name TEXT, dosage_start_date TEXT, dosage_end_date TEXT, time_until_next_dose TEXT, dosage_frequency_unit TEXT, dosage_frequency TEXT, dosage_number TEXT)')
+    run_query('CREATE TABLE medications (id INTEGER, name TEXT, manufacturer_name TEXT, dosage_start_date TEXT, dosage_end_date TEXT, dosage_frequency_unit TEXT, dosage_frequency TEXT, dosage_number TEXT)')
     # add test medications
 
     # every 12 hours 2 pill of Ciprofloxacin manufactured by Camber Pharmaceuticals, Inc. from 2021-01-01 to 2021-05-01
-    run_query('INSERT INTO medications VALUES (2, "Ciprofloxacin", "Camber Pharmaceuticals, Inc.", "2021-01-01", "2021-05-01", "1", "day", "12", "2")')
+    run_query('INSERT INTO medications VALUES (2, "Ciprofloxacin", "Camber Pharmaceuticals, Inc.", "2021-01-01", "2021-05-01", "day", "12", "2")')
 
     # every 4 hours 1 pill of fluconazole manufactured by Major Pharmaceuticals from 2021-01-01 to 2021-05-01
-    run_query('INSERT INTO medications VALUES (3, "fluconazole", "Major Pharmaceuticals", "2021-01-01", "2021-05-01", "1", "hour", "4", "1")')
+    run_query('INSERT INTO medications VALUES (3, "fluconazole", "Major Pharmaceuticals", "2021-01-01", "2021-05-01", "hour", "4", "1")')
 
     # every 12 hours 2 pill of simvastatin manufactured by Dr.Reddys Laboratories Inc from 2021-01-01 to 2021-05-01
-    run_query('INSERT INTO medications VALUES (4, "simvastatin", "Dr.Reddys Laboratories Inc", "2021-01-01", "2021-05-01", "1", "day", "12", "2")')
-
+    run_query('INSERT INTO medications VALUES (4, "simvastatin", "Dr.Reddys Laboratories Inc", "2021-01-01", "2021-05-01", "hour", "12", "2")')
 
 def get_hash(username):
     return run_query(f'SELECT hash FROM users WHERE username="{username}"')[0][0]
 
-def add_medication(name, manufacturer_name, dosage_start_date, dosage_end_date, time_until_next_dose, dosage_frequency_unit, dosage_frequency, dosage_number):
+def add_medication(name, manufacturer_name, dosage_start_date, dosage_end_date, dosage_frequency_unit, dosage_frequency, dosage_number):
     id = run_query('SELECT MAX(id) FROM medications')[0][0] + 1
-    run_query(f'INSERT INTO medications VALUES ({id}, "{name}", "{manufacturer_name}", "{dosage_start_date}", "{dosage_end_date}", "{time_until_next_dose}", "{dosage_frequency_unit}", "{dosage_frequency}", "{dosage_number}")')
+    run_query(f'INSERT INTO medications VALUES ({id}, "{name}", "{manufacturer_name}", "{dosage_start_date}", "{dosage_end_date}", "{dosage_frequency_unit}", "{dosage_frequency}", "{dosage_number}")')
     return id
 
 def add_id_to_user(username, id):
@@ -58,8 +58,22 @@ def get_medicines_for_user(username):
     for med_id in med_ids: meds.append(run_query(f'SELECT * FROM medications WHERE id={med_id}')[0])
     return meds
 
+
+def calc_total_doses(start_date, end_date, frequency_unit, frequency):
+    # for example:
+    # every 12 hours 2 pill of simvastatin manufactured by Dr.Reddys Laboratories Inc from 2021-01-01 to 2021-05-01
+    # 'INSERT INTO medications VALUES (4, "simvastatin", "Dr.Reddys Laboratories Inc", "2021-01-01", "2021-05-01", "hour", "12", "2")'
+    # this would be 2021-01-01 to 2021-05-01 so 4 days and 12 hours which means a total of eight doses, need to calculate this
+
+    # first check if the frequency unit is day or hour
+    if frequency_unit == 'day':
+        # first find the number of days between the start and end date
+        tools.date_difference_in_days(start_date, end_date)
+        print(tools.date_difference_in_days(start_date, end_date))
+
 if __name__ == '__main__':
     reset_db()
-    # id = add_medication('rand phosphate', 'Roche Laboratories Inc', '2021-01-01', '2021-05-01', '1', 'day', '12', '2')
+    id = add_medication('rand phosphate', 'Roche Laboratories Inc', '2021-01-01', '2021-05-01', 'day', '12', '2')
+    add_id_to_user('jdoe', id)
     print(get_medicines_for_user('jdoe'))
 
