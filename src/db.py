@@ -30,5 +30,12 @@ def reset_db():
     # every 12 hours 2 pill of Ciprofloxacin manufactured by Camber Pharmaceuticals, Inc. from 2021-01-01 to 2021-05-01
     run_query('INSERT INTO medications VALUES ("2", "Ciprofloxacin", "Camber Pharmaceuticals, Inc.", "2021-01-01", "2021-05-01", "1", "hour", "12", "2")')
 
+def get_hash(username):
+    return run_query(f'SELECT hash FROM users WHERE username="{username}"')[0][0]
+
+def add_medication(name, manufacturer_name, dosage_start_date, dosage_end_date, time_until_next_dose, dosage_frequency_unit, dosage_frequency, dosage_number):
+    id = run_query('SELECT MAX(id) FROM medications')[0][0] + 1
+    run_query(f'INSERT INTO medications VALUES ("{id}" "{name}", "{manufacturer_name}", "{dosage_start_date}", "{dosage_end_date}", "{time_until_next_dose}", "{dosage_frequency_unit}", "{dosage_frequency}", "{dosage_number}")')
+
 if __name__ == '__main__':
     reset_db()

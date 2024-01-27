@@ -1,4 +1,5 @@
 import tools, requests
+import db
 from flask import Flask, request
 from flask_cors import CORS
 app = Flask(__name__)
@@ -18,10 +19,10 @@ def lookup():
 def auth():
     username = request.args.get('username')
     hash = request.args.get('hash')
-    if hash == '123456' and username == 'admin':
-        return 'SUCCESS'
+    if db.get_hash(username) == hash:
+        return 'true'
     else:
-        return 'FAILURE'
+        return 'false'
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
