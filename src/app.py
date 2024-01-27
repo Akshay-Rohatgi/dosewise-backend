@@ -43,6 +43,12 @@ def auth():
     else:
         return 'false'
     
+
+@app.route('/api/v1/get_medicines_for_user')
+def get_medicines_for_user():
+    username = request.args.get('username')
+    return db.get_medicines_for_user(username)
+    
 # run lookups.get_interactions on every possible pair of medicines for a user
 @app.route('/api/v1/get_interactions_for_user')
 def get_interactions_for_user():

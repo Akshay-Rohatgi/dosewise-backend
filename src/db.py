@@ -49,8 +49,6 @@ def get_medicines_for_user(username):
     for med_id in med_ids: meds.append(run_query(f'SELECT * FROM medications WHERE id="{med_id}"')[0])
     return meds
 
-
-
 if __name__ == '__main__':
     reset_db()
     print(get_medicines_for_user('jdoe'))
