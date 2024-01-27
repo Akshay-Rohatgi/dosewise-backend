@@ -23,12 +23,13 @@ def get_interactions(med1, med2):
 
     if med1 == 'no results' or med2 == 'no results':
         return 'failed to lookup medicine in interactions database'
-    # https://reference.medscape.com/druginteraction.do?action=getMultiInteraction&ids=342618,343346
-    if tools.get_data(f'https://reference.medscape.com/druginteraction.do?action=getMultiInteraction&ids={med1},{med2}')["multiInteractions"] == []:
-        return 'no interactions'
+    data = tools.get_data(f'https://reference.medscape.com/druginteraction.do?action=getMultiInteraction&ids={med1},{med2}')
+    if data["multiInteractions"] == []:
+        return 'no interactions found!'
     else:
-        return "interactions found"
+        return data["multiInteractions"][0]["text"]    
+
 if __name__ == '__main__':
     #print(lookup_medicine_medscape('oseltamivir phosphate'))
     print(get_interactions('oseltamivir phosphate', 'ciprofloxacin'))
-    print(get_interactions('Bactrim', 'Warfarin'))
+    print(get_interactions('Fluconazole', 'simvastatin'))
