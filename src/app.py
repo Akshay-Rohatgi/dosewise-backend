@@ -17,8 +17,9 @@ def lookup():
 @app.route('/api/v1/adduser')
 def adduser():
     username = request.args.get('username')
+    full_name = request.args.get('full_name')
     hash = request.args.get('hash')
-    db.add_user(username, hash)
+    db.add_user(username, full_name, hash)
     return 'true'
 
 @app.route('/api/v1/add')
