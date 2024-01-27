@@ -62,22 +62,22 @@ def add_user(username, full_name, hash):
     run_query(f'INSERT INTO users VALUES ("{username}", "{full_name}", "{hash}", "")')
 
 def calc_total_doses(start_date, end_date, frequency_unit, frequency):
-    # for example:
-    # every 12 hours 2 pill of simvastatin manufactured by Dr.Reddys Laboratories Inc from 2021-01-01 to 2021-05-01
-    # 'INSERT INTO medications VALUES (4, "simvastatin", "Dr.Reddys Laboratories Inc", "2021-01-01", "2021-05-01", "hour", "12", "2")'
-    # this would be 2021-01-01 to 2021-05-01 so 4 days and 12 hours which means a total of eight doses, need to calculate this
-
     # first check if the frequency unit is day or hour
     if frequency_unit == 'day':
-        # first find the number of days between the start and end date
         days = tools.date_difference_in_days(start_date, end_date)
         return days * frequency
+    elif frequency_unit == 'hour':
+        hours = tools.date_difference_in_hours(start_date, end_date)
+        return hours / frequency
 
 if __name__ == '__main__':
     reset_db()
     # id = add_medication('rand phosphate', 'Roche Laboratories Inc', '2021-01-01', '2021-05-01', 'day', '12', '2')
     # add_id_to_user('jdoe', id)
     # print(get_medicines_for_user('jdoe'))
+    
     # every day 2 dose of Ciprofloxacin manufactured by Camber Pharmaceuticals, Inc. from 2021-01-01 to 2021-05-01
     print(calc_total_doses('2021-01-01', '2021-05-01', 'day', 2))
+    # every 4 hours 1 pill of fluconazole manufactured by Major Pharmaceuticals from 2021-01-01 to 2021-05-01
+    print(calc_total_doses('2021-01-01', '2021-05-01', 'hour', 4))
 
