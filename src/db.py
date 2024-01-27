@@ -26,7 +26,7 @@ def reset_db():
     run_query('CREATE TABLE medications (id INTEGER, name TEXT, manufacturer_name TEXT, dosage_start_date TEXT, dosage_end_date TEXT, dosage_frequency_unit TEXT, dosage_frequency TEXT, dosage_number TEXT)')
     # add test medications
 
-    # every 12 hours 2 pill of Ciprofloxacin manufactured by Camber Pharmaceuticals, Inc. from 2021-01-01 to 2021-05-01
+    # every day 2 dose of Ciprofloxacin manufactured by Camber Pharmaceuticals, Inc. from 2021-01-01 to 2021-05-01
     run_query('INSERT INTO medications VALUES (2, "Ciprofloxacin", "Camber Pharmaceuticals, Inc.", "2021-01-01", "2021-05-01", "day", "12", "2")')
 
     # every 4 hours 1 pill of fluconazole manufactured by Major Pharmaceuticals from 2021-01-01 to 2021-05-01
@@ -58,6 +58,8 @@ def get_medicines_for_user(username):
     for med_id in med_ids: meds.append(run_query(f'SELECT * FROM medications WHERE id={med_id}')[0])
     return meds
 
+def add_user(username, full_name, hash):
+    run_query(f'INSERT INTO users VALUES ("{username}", "{full_name}", "{hash}", "")')
 
 def calc_total_doses(start_date, end_date, frequency_unit, frequency):
     # for example:
@@ -68,12 +70,14 @@ def calc_total_doses(start_date, end_date, frequency_unit, frequency):
     # first check if the frequency unit is day or hour
     if frequency_unit == 'day':
         # first find the number of days between the start and end date
-        tools.date_difference_in_days(start_date, end_date)
-        print(tools.date_difference_in_days(start_date, end_date))
+        days = tools.date_difference_in_days(start_date, end_date)
+        return days * frequency
 
 if __name__ == '__main__':
     reset_db()
-    id = add_medication('rand phosphate', 'Roche Laboratories Inc', '2021-01-01', '2021-05-01', 'day', '12', '2')
-    add_id_to_user('jdoe', id)
-    print(get_medicines_for_user('jdoe'))
+    # id = add_medication('rand phosphate', 'Roche Laboratories Inc', '2021-01-01', '2021-05-01', 'day', '12', '2')
+    # add_id_to_user('jdoe', id)
+    # print(get_medicines_for_user('jdoe'))
+    # every day 2 dose of Ciprofloxacin manufactured by Camber Pharmaceuticals, Inc. from 2021-01-01 to 2021-05-01
+    print(calc_total_doses('2021-01-01', '2021-05-01', 'day', 2))
 

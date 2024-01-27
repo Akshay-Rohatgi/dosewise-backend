@@ -14,6 +14,13 @@ def lookup():
     name = request.args.get('name').lower()
     return lookups.lookup_medicine_fda(name)
 
+@app.route('/api/v1/adduser')
+def adduser():
+    username = request.args.get('username')
+    hash = request.args.get('hash')
+    db.add_user(username, hash)
+    return 'true'
+
 @app.route('/api/v1/add')
 def add():
     username = request.args.get('username')
