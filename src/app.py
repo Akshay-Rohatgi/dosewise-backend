@@ -1,5 +1,5 @@
 import tools, requests
-import db
+import db, lookups
 from flask import Flask, request
 from flask_cors import CORS
 app = Flask(__name__)
@@ -12,7 +12,26 @@ def index():
 @app.route('/api/v1/lookup')
 def lookup():
     name = request.args.get('name').lower()
-    return tools.get_data(f'https://api.fda.gov/drug/ndc.json?search=generic_name:"{name}"&limit=1')
+    return lookups.lookup_medicine_fda(name)
+
+@app.route('/api/v1/add')
+def add():
+    username = request.args.get('username')
+    hash = request.args.get('hash')
+    if db.get_hash(username) == hash:
+        name = request.args.get('name')
+        manufacturer_name = request.args.get('manufacturer_name')
+        dosage_start_date = request.args.get('dosage_start_date')
+        dosage_end_date = request.args.get('dosage_end_date')
+        time_until_next_dose = request.args.get('time_until_next_dose')
+        dosage_frequency_unit = request.args.get('dosage_frequency_unit')
+        dosage_frequency = request.args.get('dosage_frequency')
+        dosage_number = request.args.get('dosage_number')
+        id = db.add_medication(name, manufacturer_name, dosage_start_date, dosage_end_date, time_until_next_dose, dosage_frequency_unit, dosage_frequency, dosage_number)
+        db.run_query(f'UPDATE users SET med_ids="{db.get_medicines_for_user(username)}" WHERE username="{username}"')
+        return 'true'
+    else:
+        return 'false'
 
 # authentication, username and hashed password
 @app.route('/api/v1/auth')
