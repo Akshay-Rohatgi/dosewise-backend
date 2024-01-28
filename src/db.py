@@ -18,7 +18,7 @@ def calc_total_doses(start_date, end_date, frequency_unit, frequency):
         return days * frequency
     elif frequency_unit == 'hour':
         hours = tools.date_difference_in_hours(start_date, end_date)
-        return hours / frequency
+        return hours / int(frequency)
 
 def add_medication(name, manufacturer_name, dosage_start_date, dosage_end_date, dosage_frequency_unit, dosage_frequency, total_doses, taken_doses):
     id = run_query('SELECT MAX(id) FROM medications')[0][0] + 1
@@ -77,9 +77,9 @@ def add_user(username, full_name, hash):
 
 if __name__ == '__main__':
     reset_db()
-    # total = calc_total_doses('2021-01-01', '2021-03-01', 'day', 3)
-    # id = add_medication(name='fluconazole', manufacturer_name='Major Pharmaceuticals', dosage_start_date='2021-01-01', dosage_end_date='2021-03-01', dosage_frequency_unit='day', dosage_frequency=3, total_doses=total, taken_doses=0)
-    # add_id_to_user('jdoe', id)
+    total = calc_total_doses('2021-01-01', '2021-03-01', 'day', 3)
+    id = add_medication(name='fluconazole', manufacturer_name='Major Pharmaceuticals', dosage_start_date='2021-01-01', dosage_end_date='2021-03-01', dosage_frequency_unit='day', dosage_frequency=3, total_doses=total, taken_doses=0)
+    add_id_to_user('jdoe', id)
     print(get_medicines_for_user('jdoe'))
 
     # # every day 2 dose of Ciprofloxacin manufactured by Camber Pharmaceuticals, Inc. from 2021-01-01 to 2021-05-01
