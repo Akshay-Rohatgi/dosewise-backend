@@ -34,7 +34,7 @@ def add():
         dosage_frequency_unit = request.args.get('dosage_frequency_unit')
         dosage_frequency = request.args.get('dosage_frequency')
         dosage_number = request.args.get('dosage_number')
-        total = tools.calc_total_doses(dosage_start_date, dosage_end_date, dosage_frequency_unit, dosage_frequency)
+        total = db.calc_total_doses(dosage_start_date, dosage_end_date, dosage_frequency_unit, dosage_frequency)
         id = db.add_medication(name, manufacturer_name, dosage_start_date, dosage_end_date, dosage_frequency_unit, dosage_frequency, total, 0)
         db.add_id_to_user(username, id)
         return 'true'
