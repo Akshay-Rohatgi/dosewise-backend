@@ -21,6 +21,7 @@ cd src
 python3 app.py 
 ```
 Visit Frontend at http://localhost:5173/
+
 Visit Backend at http://localhost:8080/
 
 
