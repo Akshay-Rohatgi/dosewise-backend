@@ -33,7 +33,7 @@ def reset_db():
     # create users table
     run_query('CREATE TABLE users (username TEXT, full_name TEXT, hash TEXT, med_ids TEXT)') # med_ids is a comma separated list of medication ids that belong to the user
     # add test user jane Doe
-    run_query('INSERT INTO users VALUES ("jdoe", "Jane Doe", "5f4dcc3b5aa765d61d8327deb882cf99", "2,3,4")')
+    run_query('INSERT INTO users VALUES ("jdoe", "Jane Doe", "5f4dcc3b5aa765d61d8327deb882cf99", "1,2,3")')
 
     # create medications table, ids should be an integer
     
@@ -77,9 +77,9 @@ def add_user(username, full_name, hash):
 
 if __name__ == '__main__':
     reset_db()
-    total = calc_total_doses('2021-01-01', '2021-03-01', 'day', 3)
-    id = add_medication(name='fluconazole', manufacturer_name='Major Pharmaceuticals', dosage_start_date='2021-01-01', dosage_end_date='2021-03-01', dosage_frequency_unit='day', dosage_frequency=3, total_doses=total, taken_doses=0)
-    add_id_to_user('jdoe', id)
+    # total = calc_total_doses('2021-01-01', '2021-03-01', 'day', 3)
+    # id = add_medication(name='fluconazole', manufacturer_name='Major Pharmaceuticals', dosage_start_date='2021-01-01', dosage_end_date='2021-03-01', dosage_frequency_unit='day', dosage_frequency=3, total_doses=total, taken_doses=0)
+    # add_id_to_user('jdoe', id)
     print(get_medicines_for_user('jdoe'))
 
     # # every day 2 dose of Ciprofloxacin manufactured by Camber Pharmaceuticals, Inc. from 2021-01-01 to 2021-05-01
