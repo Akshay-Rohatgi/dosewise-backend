@@ -5,16 +5,16 @@ Dosewise Backend
 Run both commands to see Dosewise in action! 
 
 Frontend
-```
-git clone https://github.com/arnavk377/dosewise-frontend.git (To initially clone repository)
+```bash
+git clone https://github.com/arnavk377/dosewise-frontend.git # (To initially clone repository)
 cd dosewise-frontend
 npm install
 npm run dev
 ```
 
 Backend
-```
-git clone https://github.com/Akshay-Rohatgi/dosewise-backend.git (To initially clone repository)
+```bash
+git clone https://github.com/Akshay-Rohatgi/dosewise-backend.git # (To initially clone repository)
 cd dosewise-backend
 pip install -r requirements.txt
 cd src
