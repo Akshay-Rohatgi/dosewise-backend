@@ -5,7 +5,7 @@ Click [here](http://143.198.136.223:5173/) to see Dosewise live!
 Dosewise Backend
 
 # Full Project Runtime Commands
-Run both commands to see Dosewise in action! 
+Run both commands to see Dosewise locally! 
 
 Frontend
 ```bash
