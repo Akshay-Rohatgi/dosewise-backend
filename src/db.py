@@ -62,6 +62,7 @@ def add_id_to_user(username, id):
     med_ids.append(str(id))
     print(med_ids)
     med_ids = ','.join(med_ids)
+    if med_ids[0] == ',': med_ids = med_ids[1:]
     run_query(f'UPDATE users SET med_ids="{med_ids}" WHERE username="{username}"')    
 
 def get_medicines_for_user(username):
