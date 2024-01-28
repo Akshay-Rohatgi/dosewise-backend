@@ -7,9 +7,9 @@ Run both commands to see Dosewise in action!
 Frontend
 ```
 git clone https://github.com/arnavk377/dosewise-frontend.git (To initially clone repository)
-cd dosewise-frontend (or repository name)
+cd dosewise-frontend
 npm install
-npm run dev (for local host server)
+npm run dev
 ```
 
 Backend
