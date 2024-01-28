@@ -51,6 +51,16 @@ def auth():
     else:
         return 'false'
     
+# get user's full name
+@app.route('/api/v1/get_full_name')
+def get_full_name():
+    username = request.args.get('username')
+    hash = request.args.get('hash')
+    if db.get_hash(username) == hash: 
+        return db.get_full_name(username)
+    else: 
+        return 'INVALID HASH'
+    
 @app.route('/api/v1/get_medicines_for_user')
 def get_medicines_for_user():
     username = request.args.get('username')
