@@ -1,3 +1,6 @@
+# Deployed Link
+Click [here](http://143.198.136.223:5173/) to see Dosewise live!
+
 # dosewise-backend
 Dosewise Backend
 
