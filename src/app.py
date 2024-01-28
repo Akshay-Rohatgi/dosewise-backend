@@ -33,11 +33,49 @@ def add():
         dosage_end_date = request.args.get('dosage_end_date')
         dosage_frequency_unit = request.args.get('dosage_frequency_unit')
         dosage_frequency = request.args.get('dosage_frequency')
-        dosage_number = request.args.get('dosage_number')
-        total = tools.calc_total_doses(dosage_start_date, dosage_end_date, dosage_frequency_unit, dosage_frequency)
-        id = db.add_medication(name, manufacturer_name, dosage_start_date, dosage_end_date, dosage_frequency_unit, dosage_frequency, total, 0)
+        total = db.calc_total_doses(dosage_start_date, dosage_end_date, dosage_frequency_unit, dosage_frequency)
+        print(f"db.add_medication('{name}', '{manufacturer_name}', '{dosage_start_date}', '{dosage_end_date}', '{dosage_frequency_unit}', {dosage_frequency}, {total}, 0)")
+        id = db.add_medication(name, manufacturer_name, dosage_start_date, dosage_end_date, dosage_frequency_unit, int(dosage_frequency), total, 0)
         db.add_id_to_user(username, id)
         return 'true'
+    else:
+        return 'false'
+    
+
+# delete a medication from a user's list
+# /api/v1/delete?username=jdoe&hash=5f4dcc3b5aa765d61d8327deb882cf99&id=1
+@app.route('/api/v1/delete')
+def delete():
+    username = request.args.get('username')
+    hash = request.args.get('hash')
+    if db.get_hash(username) == hash:
+        id = request.args.get('id')
+        db.run_query(f'DELETE FROM medications WHERE id={id}')
+        med_ids = db.run_query(f'SELECT med_ids FROM users WHERE username="{username}"')[0][0]
+        med_ids = med_ids.split(',')
+        med_ids.remove(id)
+        med_ids = ','.join(med_ids)
+        db.run_query(f'UPDATE users SET med_ids="{med_ids}" WHERE username="{username}"')
+        return 'true'
+    else:
+        return 'false'
+
+# mark a dose as taken
+# /api/v1/take?username=jdoe&hash=5f4dcc3b5aa765d61d8327deb882cf99&id=1
+@app.route('/api/v1/take')
+def take():
+    username = request.args.get('username')
+    hash = request.args.get('hash')
+    if db.get_hash(username) == hash:
+        id = request.args.get('id')
+        total_doses = db.run_query(f'SELECT total_doses FROM medications WHERE id={id}')[0][0]
+        taken_doses = db.run_query(f'SELECT taken_doses FROM medications WHERE id={id}')[0][0]
+        if taken_doses == total_doses: 
+            return 'false'
+        else:
+            taken_doses += 1
+            db.run_query(f'UPDATE medications SET taken_doses={taken_doses} WHERE id={id}')
+            return 'true'
     else:
         return 'false'
 
