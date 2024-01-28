@@ -24,13 +24,5 @@ Visit Frontend at http://localhost:5173/
 
 Visit Backend at http://localhost:8080/
 
-
-# Repository Runtime Commands
-```
-pip install -r requirements.txt
-cd src
-python3 app.py 
-```
-
 # Frontend Repository
 Link to [Frontend](https://github.com/arnavk377/dosewise-frontend)
