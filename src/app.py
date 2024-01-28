@@ -69,10 +69,10 @@ def take():
     if db.get_hash(username) == hash:
         id = request.args.get('id')
         total_doses = db.run_query(f'SELECT total_doses FROM medications WHERE id={id}')[0][0]
+        taken_doses = db.run_query(f'SELECT taken_doses FROM medications WHERE id={id}')[0][0]
         if taken_doses == total_doses: 
-            pass
+            return 'false'
         else:
-            taken_doses = db.run_query(f'SELECT taken_doses FROM medications WHERE id={id}')[0][0]
             taken_doses += 1
             db.run_query(f'UPDATE medications SET taken_doses={taken_doses} WHERE id={id}')
             return 'true'
